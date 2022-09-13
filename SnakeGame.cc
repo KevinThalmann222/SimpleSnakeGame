@@ -1,3 +1,4 @@
+//#include <conio.h>
 #include <iostream>
 #include <stdlib.h>
 #include <windows.h>
@@ -11,12 +12,61 @@ int x_fruit, y_fruit;
 int x_snake = width / 2;
 int y_snake = height / 2;
 
+
+enum snake_direction
+{
+    STOP = 0,
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+snake_direction dir;
+
 void GameSetup()
 {
     // random number in range 0 to width-1
     x_fruit = rand() % width;
     // random number in range 0 to height-1
     y_fruit = rand() % height;
+}
+
+void MoveSetting()
+{
+    switch (getchar())
+    {
+    case 'a':
+        dir = LEFT;
+        break;
+    case 'd':
+        dir = RIGHT;
+        break;
+    case 'w':
+        dir = UP;
+        break;
+    case 's':
+        dir = DOWN;
+        break;
+    }
+}
+
+void MoveSnake()
+{
+    switch (dir)
+    {
+    case LEFT:
+        x_snake--;
+        break;
+    case RIGHT:
+        x_snake++;
+        break;
+    case UP:
+        y_snake--;
+        break;
+    case DOWN:
+        y_snake++;
+        break;
+    }
 }
 
 void GameArea()
@@ -67,6 +117,8 @@ int main()
     while (!gameover)
     {
         GameArea();
+        MoveSetting();
+        MoveSnake();
         // 50ms wird gewartet
         Sleep(50);
     }
