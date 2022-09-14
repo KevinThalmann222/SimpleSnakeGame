@@ -4,10 +4,10 @@
 #include <windows.h>
 using namespace std;
 
-const int height = 30;
+const int height = 20;
 const int width = 60;
 bool gameover = false;
-int score = 0;
+int score = -1;
 int x_fruit, y_fruit;
 int x_snake = width / 2;
 int y_snake = height / 2;
@@ -25,16 +25,21 @@ snake_direction dir;
 
 void GameSetup()
 {
-    // random number in range 0 to width-1
-    x_fruit = rand() % width;
-    // random number in range 0 to height-1
-    y_fruit = rand() % height;
+    // random number in range 1 to width-5
+    x_fruit = rand() % (width - 5) + 1;
+    // random number in range 5 to height-1
+    y_fruit = rand() % (height - 5) + 1;
+    //score + 1
+    score++;
 }
 
 void MoveSetting()
 {
     switch (getchar())
     {
+    case 'q':
+        dir = STOP;
+        break;
     case 'a':
         dir = LEFT;
         break;
@@ -54,6 +59,9 @@ void MoveSnake()
 {
     switch (dir)
     {
+    case STOP:
+        gameover = true;
+        break;
     case LEFT:
         x_snake--;
         break;
@@ -95,6 +103,10 @@ void GameArea()
             {
                 cout << "F";
             }
+            else if (x_snake == x_fruit && y_snake == y_fruit)
+            {
+                GameSetup();
+            }
             else
             {
                 cout << " ";
@@ -108,6 +120,8 @@ void GameArea()
         cout << "-";
     }
     cout << endl;
+    cout << "Fruit X-Pos: " << x_fruit;
+    cout << " | Fruit Y-Pos: " << y_fruit << endl;
     cout << "Your Score is: " << score << endl;
 }
 
@@ -120,7 +134,7 @@ int main()
         MoveSetting();
         MoveSnake();
         // 50ms wird gewartet
-        Sleep(50);
+        //Sleep(50);
     }
 
     return 0;
