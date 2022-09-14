@@ -12,7 +12,6 @@ int x_fruit, y_fruit;
 int x_snake = width / 2;
 int y_snake = height / 2;
 
-
 enum snake_direction
 {
     STOP = 0,
@@ -77,14 +76,12 @@ void MoveSnake()
     }
 }
 
-void GameArea()
+void GameLogic()
 {
     system("clear");
     // Ausgabe der oberen Reihe
     for (int x = 0; x < width; x++)
-    {
-        cout << "-";
-    }
+        cout << "#";
     cout << endl;
     // Ausgabe der seitlichen Reihen
     for (int y = 0; y < height; y++)
@@ -92,36 +89,42 @@ void GameArea()
         for (int x = 0; x < width; x++)
         {
             if (x == 0 || x == width - 1)
-            {
-                cout << "|";
-            }
+                cout << "#";
             else if (x == x_snake && y == y_snake)
-            {
                 cout << "O";
-            }
             else if (x == x_fruit && y == y_fruit)
-            {
                 cout << "F";
-            }
             else if (x_snake == x_fruit && y_snake == y_fruit)
-            {
                 GameSetup();
-            }
+            // Wallrunning
+            else if (x_snake == 1)
+                x_snake = width - 2;
+            else if (x_snake == width - 1)
+                x_snake = 2;
+            else if (y_snake == -1)
+                y_snake = height - 1;
+            else if (y_snake == height)
+                y_snake = 0;
+            // Wallrunning end
             else
-            {
                 cout << " ";
-            }
         }
         cout << endl;
     }
     // Ausgabe der unteren Reihe
     for (int x = 0; x < width; x++)
-    {
-        cout << "-";
-    }
+        cout << "#";
     cout << endl;
-    cout << "Fruit X-Pos: " << x_fruit;
-    cout << " | Fruit Y-Pos: " << y_fruit << endl;
+    cout << "<< SnakeGame by Kevin Thalmann >>" << endl;
+    cout << "---------------------------------" << endl;
+    cout << "    Press: w + Enter for UP      " << endl;
+    cout << "    Press: s + Enter for DOWN    " << endl;
+    cout << "    Press: a + Enter for LEFT    " << endl;
+    cout << "    Press: d + Enter for RIGHT   " << endl;
+    cout << "    Press: q + Enter for QUIT    " << endl;
+    cout << "---------------------------------" << endl;
+    cout << "Snake X-Pos: " << x_snake;
+    cout << " | Snake Y-Pos: " << y_snake << endl;
     cout << "Your Score is: " << score << endl;
 }
 
@@ -130,7 +133,7 @@ int main()
     GameSetup();
     while (!gameover)
     {
-        GameArea();
+        GameLogic();
         MoveSetting();
         MoveSnake();
         // 50ms wird gewartet
