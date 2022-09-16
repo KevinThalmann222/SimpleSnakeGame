@@ -100,6 +100,15 @@ void SnakeLength()
     }
 }
 
+void SnakeCollision()
+{
+    for (int i = 0; i < snake_tail_len; i++)
+    {
+        if (x_snake == snake_tail_x[i] && y_snake == snake_tail_y[i])
+            gameover = true;
+    }
+}
+
 void GameLogic()
 {
     system("clear");
@@ -176,7 +185,13 @@ int main()
         GameLogic();
         MoveSetting();
         MoveSnake();
+        SnakeCollision();
     }
+    system("clear");
+    cout << "------------------------" << endl;
+    cout << "   <<< GAMEOVER >>>     " << endl;
+    cout << "     Highscore: " << score << endl;
+    cout << "------------------------" << endl;
 
     return 0;
 }
