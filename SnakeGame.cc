@@ -4,6 +4,11 @@
 #include <windows.h>
 using namespace std;
 
+#define RESET "\033[0m"
+#define BOLDBLUE "\033[1m\033[34m"  /* Bold Blue */
+#define BOLDGREEN "\033[1m\033[32m" /* Bold Green */
+#define BOLDRED "\033[1m\033[31m"   /* Bold Red */
+
 const int height = 20;
 const int width = 60;
 bool gameover = false;
@@ -116,7 +121,7 @@ void GameLogic()
     // Ausgabe der oberen Reihe
     for (int x = 0; x < width; x++)
     {
-        cout << "#";
+        cout << BOLDBLUE << "#";
     }
     cout << endl;
     // Ausgabe der seitlichen Reihen
@@ -125,11 +130,11 @@ void GameLogic()
         for (int x = 0; x < width; x++)
         {
             if (x == 0 || x == width - 1)
-                cout << "#";
+                cout << BOLDBLUE << "#" << RESET;
             else if (x == x_snake && y == y_snake)
-                cout << "0";
+                cout << BOLDRED << "0" << RESET;
             else if (x == x_fruit && y == y_fruit)
-                cout << "F";
+                cout << BOLDGREEN << "F" << RESET;
             else if (x_snake == x_fruit && y_snake == y_fruit)
                 GameSetup();
             // Wallrunning
@@ -150,7 +155,7 @@ void GameLogic()
 
                     if (snake_tail_x[k] == x && snake_tail_y[k] == y)
                     {
-                        cout << "o";
+                        cout << BOLDRED << "o" << RESET;
                         print_tail = true;
                     }
                 }
@@ -162,7 +167,7 @@ void GameLogic()
     }
     // Ausgabe der unteren Reihe
     for (int x = 0; x < width; x++)
-        cout << "#";
+        cout << BOLDBLUE << "#" << RESET;
     cout << endl;
     cout << "<< SnakeGame by Kevin Thalmann >>" << endl;
     cout << "---------------------------------" << endl;
