@@ -11,6 +11,9 @@ int score = -1;
 int x_fruit, y_fruit;
 int x_snake = width / 2;
 int y_snake = height / 2;
+int snake_tail_x[100]; // create a vector with 0 in range 0 - 99
+int snake_tail_y[100]; // create a vector with 0 in range 0 - 99
+int snake_tail_len;    // length of the snake tail
 
 enum snake_direction
 {
@@ -20,7 +23,7 @@ enum snake_direction
     UP,
     DOWN
 };
-snake_direction dir;
+snake_direction snake_dir;
 
 void GameSetup()
 {
@@ -28,8 +31,10 @@ void GameSetup()
     x_fruit = rand() % (width - 5) + 1;
     // random number in range 5 to height-1
     y_fruit = rand() % (height - 5) + 1;
-    //score + 1
+    // score + 1
     score++;
+    // snake tail + 1
+    snake_tail_len++;
 }
 
 void MoveSetting()
@@ -37,26 +42,26 @@ void MoveSetting()
     switch (getchar())
     {
     case 'q':
-        dir = STOP;
+        snake_dir = STOP;
         break;
     case 'a':
-        dir = LEFT;
+        snake_dir = LEFT;
         break;
     case 'd':
-        dir = RIGHT;
+        snake_dir = RIGHT;
         break;
     case 'w':
-        dir = UP;
+        snake_dir = UP;
         break;
     case 's':
-        dir = DOWN;
+        snake_dir = DOWN;
         break;
     }
 }
 
 void MoveSnake()
 {
-    switch (dir)
+    switch (snake_dir)
     {
     case STOP:
         gameover = true;
@@ -75,13 +80,35 @@ void MoveSnake()
         break;
     }
 }
+void SnakeLength()
+{
+    int prev_x = snake_tail_x[0];
+    int prev_y = snake_tail_y[0];
+    int prev_x2, prev_y2;
+    // snake tail 0 is on ...
+    // the same pos as the snakehead
+    snake_tail_x[0] = x_snake;
+    snake_tail_y[0] = y_snake;
+    for (int i = 1; i < snake_tail_len; i++)
+    {
+        prev_x2 = snake_tail_x[i];
+        prev_y2 = snake_tail_y[i];
+        snake_tail_x[i] = prev_x;
+        snake_tail_y[i] = prev_y;
+        prev_x = prev_x2;
+        prev_y = prev_y2;
+    }
+}
 
 void GameLogic()
 {
     system("clear");
+    SnakeLength();
     // Ausgabe der oberen Reihe
     for (int x = 0; x < width; x++)
+    {
         cout << "#";
+    }
     cout << endl;
     // Ausgabe der seitlichen Reihen
     for (int y = 0; y < height; y++)
@@ -91,7 +118,7 @@ void GameLogic()
             if (x == 0 || x == width - 1)
                 cout << "#";
             else if (x == x_snake && y == y_snake)
-                cout << "O";
+                cout << "0";
             else if (x == x_fruit && y == y_fruit)
                 cout << "F";
             else if (x_snake == x_fruit && y_snake == y_fruit)
@@ -107,7 +134,20 @@ void GameLogic()
                 y_snake = 0;
             // Wallrunning end
             else
-                cout << " ";
+            {
+                bool print_tail = false;
+                for (int k = 0; k < snake_tail_len; k++)
+                {
+
+                    if (snake_tail_x[k] == x && snake_tail_y[k] == y)
+                    {
+                        cout << "o";
+                        print_tail = true;
+                    }
+                }
+                if (!print_tail)
+                    cout << " ";
+            }
         }
         cout << endl;
     }
@@ -136,8 +176,6 @@ int main()
         GameLogic();
         MoveSetting();
         MoveSnake();
-        // 50ms wird gewartet
-        //Sleep(50);
     }
 
     return 0;
