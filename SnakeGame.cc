@@ -2,12 +2,12 @@
 #include <iostream>
 #include <stdlib.h>
 #include <windows.h>
-using namespace std;
-
 #define RESET "\033[0m"
-#define BOLDBLUE "\033[1m\033[34m"  /* Bold Blue */
-#define BOLDGREEN "\033[1m\033[32m" /* Bold Green */
-#define BOLDRED "\033[1m\033[31m"   /* Bold Red */
+#define BOLDBLUE "\033[1m\033[34m"
+#define BOLDGREEN "\033[1m\033[32m"
+#define BOLDRED "\033[1m\033[31m"
+
+using namespace std;
 
 const int height = 20;
 const int width = 60;
@@ -16,9 +16,9 @@ int score = -1;
 int x_fruit, y_fruit;
 int x_snake = width / 2;
 int y_snake = height / 2;
-int snake_tail_x[100]; // create a vector with 0 in range 0 - 99
-int snake_tail_y[100]; // create a vector with 0 in range 0 - 99
-int snake_tail_len;    // length of the snake tail
+int snake_tail_x[100];
+int snake_tail_y[100];
+int snake_tail_len;
 char key_press = 'w';
 
 enum snake_direction
@@ -29,9 +29,10 @@ enum snake_direction
     UP,
     DOWN
 };
+
 snake_direction snake_dir;
 
-void GameSetup()
+void DropFruit()
 {
     // random number in range 1 to width-5
     x_fruit = rand() % (width - 5) + 1;
@@ -102,6 +103,7 @@ void MoveSnake()
         break;
     }
 }
+
 void SnakeLength()
 {
     int prev_x = snake_tail_x[0];
@@ -153,7 +155,7 @@ void GameLogic()
             else if (x == x_fruit && y == y_fruit)
                 cout << BOLDGREEN << "F" << RESET;
             else if (x_snake == x_fruit && y_snake == y_fruit)
-                GameSetup();
+                DropFruit();
             // Wallrunning
             else if (x_snake == 1)
                 x_snake = width - 2;
@@ -201,7 +203,7 @@ void GameLogic()
 
 int main()
 {
-    GameSetup();
+    DropFruit();
     while (!gameover)
     {
         Sleep(10);
