@@ -19,6 +19,7 @@ int y_snake = height / 2;
 int snake_tail_x[100]; // create a vector with 0 in range 0 - 99
 int snake_tail_y[100]; // create a vector with 0 in range 0 - 99
 int snake_tail_len;    // length of the snake tail
+char key_press = 'w';
 
 enum snake_direction
 {
@@ -42,13 +43,26 @@ void GameSetup()
     snake_tail_len++;
 }
 
+void KeyPress()
+{
+    // Prüft ob eine Taste gedrückt ist.
+    // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+    if (GetAsyncKeyState(0x57))
+        key_press = 'w';
+    else if (GetAsyncKeyState(0x41))
+        key_press = 'a';
+    else if (GetAsyncKeyState(0x53))
+        key_press = 's';
+    else if (GetAsyncKeyState(0x44))
+        key_press = 'd';
+    else if (GetAsyncKeyState(0x51))
+        key_press = 'q';
+}
+
 void MoveSetting()
 {
-    switch (getchar())
+    switch (key_press)
     {
-    case 'q':
-        snake_dir = STOP;
-        break;
     case 'a':
         snake_dir = LEFT;
         break;
@@ -60,6 +74,9 @@ void MoveSetting()
         break;
     case 's':
         snake_dir = DOWN;
+        break;
+    case 'q':
+        snake_dir = STOP;
         break;
     }
 }
@@ -187,8 +204,10 @@ int main()
     GameSetup();
     while (!gameover)
     {
+        Sleep(10);
         GameLogic();
         MoveSetting();
+        KeyPress();
         MoveSnake();
         SnakeCollision();
     }
@@ -197,6 +216,5 @@ int main()
     cout << "   <<< GAMEOVER >>>     " << endl;
     cout << "     Highscore: " << score << endl;
     cout << "------------------------" << endl;
-
     return 0;
 }
