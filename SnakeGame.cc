@@ -206,7 +206,7 @@ int main()
     DropFruit();
     while (!gameover)
     {
-        Sleep(10);
+        Sleep(1);
         GameLogic();
         MoveSetting();
         KeyPress();
